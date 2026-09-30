@@ -1,21 +1,25 @@
 # Jinshal ♥
 
-A private photo site for Jingal & Vishal. Every photo is encrypted in this repo;
-only the password unlocks them in the browser.
+Private repo for Jingal & Vishal.
 
-## Updating the photos or the story
+- `photos/` — every photo as a normal JPG, one folder per album. **Private: never publish this folder.**
+- `web/` — the site (login → surprise story → albums). Its `data/` is AES-encrypted, so
+  `web/` is the only folder that may be published (e.g. Cloudflare Pages output directory = `web`).
+- `tools/` — scripts that rebuild both from the originals in `D:\Jinshal\<album>\` (never modified).
 
-The originals live one folder up (`D:\Jinshal\<album>\`) and are never modified.
+## Adding new photos
+
+Drop a new folder of photos into `D:\Jinshal`, then from `D:\Jinshal\site`:
 
 ```bash
-python tools/convert.py                     # make web-size copies of any new photos (into _cache/)
-SITE_PASSWORD=yourpassword python tools/build.py   # encrypt them into data/
+python tools/convert.py                              # web-size copies into _cache/
+python tools/export_photos.py                        # viewable copies into photos/
+SITE_PASSWORD=yourpassword python tools/build.py     # encrypted copies into web/data/
 git add -A && git commit -m "Add new photos" && git push
 ```
 
-- Titles, captions, the letter and the wedding date are in `private/story.json`
-  (never committed — it is encrypted into `data/manifest.bin` by the build).
-- To pick which photos appear in the story for an album, add
-  `"highlights": ["IMG_1234", "IMG_1240"]` and optionally `"cover": "IMG_1234"` to that album.
-- A new folder in `D:\Jinshal` becomes a new album automatically.
-- Changing the password: delete `data/salt.json`, rebuild with the new password, push.
+- Titles, captions, the letter and the wedding date live in `private/story.json`
+  (git-ignored; it is encrypted into `web/data/manifest.bin` by the build).
+- To pick the story photos for an album, add `"highlights": ["IMG_1234", ...]` and
+  optionally `"cover": "IMG_1234"` to that album in `story.json`.
+- Changing the password: delete `web/data/salt.json`, rebuild with the new password, push.
