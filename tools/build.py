@@ -22,7 +22,7 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 SITE = Path(__file__).resolve().parents[1]
 CACHE = SITE / "_cache"
-DATA = SITE / "web" / "data"
+DATA = SITE / "docs" / "data"
 STORY = SITE / "private" / "story.json"
 ITERATIONS = 250_000
 
